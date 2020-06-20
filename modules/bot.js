@@ -10,8 +10,7 @@ class Bot {
 	constructor() {
 		this.discordBot = new Discord.Client();
 		this.faq = {};
-
-		this.init();
+		this.botReady = false;
 	}
 
 	async saveFAQ() {
@@ -32,6 +31,7 @@ class Bot {
 
 	async registerReady() {
 		this.discordBot.on('ready', async () => {
+			this.botReady = true;
 			console.log('bot online');
 		});
 	}
@@ -137,6 +137,14 @@ class Bot {
 				}
 			}
 		});
+	}
+
+	async sendMessageToChannel(channelId, message) {
+		if (this.botReady) {
+			this.discordBot.channels.fetch(channelId).then(async (channel) => {
+				await channel.send(message);
+			});
+		}
 	}
 }
 
