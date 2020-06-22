@@ -5,6 +5,7 @@ const loadJsonFile = require('load-json-file');
 const prefix = '!';
 const addCommand = prefix + 'add';
 const deleteCommand = prefix + 'delete';
+const listCommand = prefix + 'list';
 
 class Bot {
 	constructor(logger) {
@@ -28,6 +29,7 @@ class Bot {
 		this.registerAddFaqCommand();
 		this.registerDeleteFaqCommand();
 		this.registerSendFaqAnswer();
+		this.registerListCommand();
 	}
 
 	async registerReady() {
@@ -131,6 +133,30 @@ class Bot {
 			this.logger.logBotFAQ('faq entry deleted', content, phraseDeleted);
 
 			return await message.channel.send('Kommando ausgeführt.');
+		});
+	}
+
+	async registerListCommand() {
+		this.discordBot.on('message', async (message) => {
+			if (message.author.bot) {
+				return;
+			}
+
+			if (!message.content.startsWith(listCommand)) {
+				return;
+			}
+
+			const embeddedMessage = new Discord.MessageEmbed().setTitle(
+				'Meine aktuelle Konfiguration'
+			);
+
+			for (let key in this.faq) {
+				embeddedMessage.addField(key, this.faq[key]);
+			}
+
+			this.logger.log('configuration was requested');
+
+			return await message.channel.send(embeddedMessage);
 		});
 	}
 
