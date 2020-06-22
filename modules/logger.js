@@ -15,7 +15,7 @@ class Logger {
 	}
 
 	getTime() {
-		return moment().format('HH:mm ::');
+		return moment().format('HH:mm :');
 	}
 }
 

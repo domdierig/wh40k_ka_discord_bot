@@ -146,17 +146,18 @@ class Bot {
 				return;
 			}
 
-			const embeddedMessage = new Discord.MessageEmbed().setTitle(
-				'Meine aktuelle Konfiguration'
-			);
+			let message =
+				'Nach meiner aktuellen Konfiguration reagiere ich auf folgende Trigger:';
 
-			for (let key in this.faq) {
-				embeddedMessage.addField(key, this.faq[key]);
+			for (const key in this.faq) {
+				message += ' ' + key + ',';
 			}
 
-			this.logger.log('configuration was requested');
+			message = message.substring(0, str.length - 1);
 
-			return await message.channel.send(embeddedMessage);
+			this.logger.log('list of faq keys was requested');
+
+			return await message.channel.send(message);
 		});
 	}
 
