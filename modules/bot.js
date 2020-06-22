@@ -146,18 +146,18 @@ class Bot {
 				return;
 			}
 
-			let message =
+			let messagetoSend =
 				'Nach meiner aktuellen Konfiguration reagiere ich auf folgende Trigger:';
 
 			for (const key in this.faq) {
-				message += ' ' + key + ',';
+				messagetoSend += ' ' + key + ',';
 			}
 
-			message = message.substring(0, str.length - 1);
+			messagetoSend = messagetoSend.substring(0, str.length - 1);
 
 			this.logger.log('list of faq keys was requested');
 
-			return await message.channel.send(message);
+			return await message.channel.send(messagetoSend);
 		});
 	}
 
