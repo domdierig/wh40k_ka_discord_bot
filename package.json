@@ -4,17 +4,24 @@
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"start": "node app.js"
+		"start": "nodemon"
 	},
 	"dependencies": {
 		"discord.js": "12.2.0",
 		"write-json-file": "4.3.0",
 		"load-json-file": "6.2.0",
-		"dotenv": "8.2.0"
+		"dotenv": "8.2.0",
+		"nodemon": "2.0.4",
+		"moment": "2.27.0"
 	},
 	"engines": {
 		"node": "12.x"
 	},
 	"repository": {},
-	"license": "MIT"
+	"license": "MIT",
+	"nodemonConfig": {
+		"ignore": [
+			"faq.json"
+		]
+	}
 }

@@ -7,7 +7,8 @@ const addCommand = prefix + 'add';
 const deleteCommand = prefix + 'delete';
 
 class Bot {
-	constructor() {
+	constructor(logger) {
+		this.logger = logger;
 		this.discordBot = new Discord.Client();
 		this.faq = {};
 		this.botReady = false;
@@ -32,7 +33,7 @@ class Bot {
 	async registerReady() {
 		this.discordBot.on('ready', async () => {
 			this.botReady = true;
-			console.log('bot online');
+			this.logger.log('bot online');
 		});
 	}
 
@@ -42,7 +43,7 @@ class Bot {
 				return;
 			}
 			if (message.content.includes(this.discordBot.user.id)) {
-				console.log('mention registred');
+				this.logger.log('mention registred');
 				return await message.channel.send('Ich lebe um zu dienen...');
 			}
 		});
@@ -63,6 +64,9 @@ class Bot {
 					.permissionsFor(message.member)
 					.has('ADMINISTRATOR')
 			) {
+				this.logger.log(
+					'command execution denied because of permissions'
+				);
 				return await message.channel.send(
 					'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
 				);
@@ -73,6 +77,7 @@ class Bot {
 				.split(' - ');
 
 			if (content.length < 2) {
+				this.logger.log('command failed, wrong arguments');
 				return await message.channel.send(
 					'Argumentliste unvollständig. Erbete erneute Eingabe.'
 				);
@@ -82,7 +87,7 @@ class Bot {
 
 			await writeJsonFile('faq.json', this.faq);
 
-			console.log('new faq message, key: ', content[0]);
+			this.logger.logBotFAQ('new faq message', content[0], content[1]);
 			return await message.channel.send('Kommando ausgeführt.');
 		});
 	}
@@ -102,6 +107,9 @@ class Bot {
 					.permissionsFor(message.member)
 					.has('ADMINISTRATOR')
 			) {
+				this.logger.log(
+					'command execution denied because of permissions'
+				);
 				return await message.channel.send(
 					'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
 				);
@@ -109,9 +117,17 @@ class Bot {
 
 			const content = message.content.substring(deleteCommand.length + 1);
 
+			let phraseDeleted = this.faq[content.toLowerCase()];
+
 			delete this.faq[content.toLowerCase()];
 
 			await writeJsonFile('faq.json', this.faq);
+
+			this.logger.logBotFAQ(
+				'faq entry deleted',
+				content.toLowerCase(),
+				phraseDeleted
+			);
 
 			return await message.channel.send('Kommando ausgeführt.');
 		});
@@ -132,7 +148,11 @@ class Bot {
 			for (const key in this.faq) {
 				if (content.includes(key)) {
 					await message.channel.send(this.faq[key]);
-					console.log('faq message send, key: ', key);
+					this.logger.logBotFAQ(
+						'faq message send',
+						key,
+						this.faq[key]
+					);
 					break;
 				}
 			}
