@@ -77,17 +77,20 @@ class Bot {
 				.split(' - ');
 
 			if (content.length < 2) {
-				this.logger.log('command failed, wrong arguments');
+				this.logger.log('command failed, wrong number of arguments');
 				return await message.channel.send(
 					'Argumentliste unvollständig. Erbete erneute Eingabe.'
 				);
 			}
 
-			this.faq[content[0].toLowerCase()] = content[1];
+			const key = content[0].toLowerCase();
+			const phrase = content[1];
+
+			this.faq[key] = phrase;
 
 			await writeJsonFile('faq.json', this.faq);
 
-			this.logger.logBotFAQ('new faq message', content[0], content[1]);
+			this.logger.logBotFAQ('new faq message', key, phrase);
 			return await message.channel.send('Kommando ausgeführt.');
 		});
 	}
@@ -115,19 +118,17 @@ class Bot {
 				);
 			}
 
-			const content = message.content.substring(deleteCommand.length + 1);
+			const content = message.content
+				.substring(deleteCommand.length + 1)
+				.toLowerCase();
 
-			let phraseDeleted = this.faq[content.toLowerCase()];
+			let phraseDeleted = this.faq[content];
 
-			delete this.faq[content.toLowerCase()];
+			delete this.faq[content];
 
 			await writeJsonFile('faq.json', this.faq);
 
-			this.logger.logBotFAQ(
-				'faq entry deleted',
-				content.toLowerCase(),
-				phraseDeleted
-			);
+			this.logger.logBotFAQ('faq entry deleted', content, phraseDeleted);
 
 			return await message.channel.send('Kommando ausgeführt.');
 		});
@@ -146,7 +147,7 @@ class Bot {
 			const content = message.content.toLowerCase();
 
 			for (const key in this.faq) {
-				if (content.includes(key)) {
+				if (content.includes(` ${key} `)) {
 					await message.channel.send(this.faq[key]);
 					this.logger.logBotFAQ(
 						'faq message send',
