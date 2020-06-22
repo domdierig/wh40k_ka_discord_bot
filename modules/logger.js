@@ -10,7 +10,7 @@ class Logger {
 	logBotFAQ(message, key, phrase) {
 		console.log(
 			this.getTime(),
-			`${message}, key: ${key}, phrase :${phrase}`
+			`${message}, key: ${key}, phrase: ${phrase}`
 		);
 	}
 
