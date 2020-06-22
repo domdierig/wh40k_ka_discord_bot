@@ -147,7 +147,7 @@ class Bot {
 			const content = message.content.toLowerCase();
 
 			for (const key in this.faq) {
-				if (content.includes(` ${key} `)) {
+				if (content.includes(key)) {
 					await message.channel.send(this.faq[key]);
 					this.logger.logBotFAQ(
 						'faq message send',
