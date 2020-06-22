@@ -153,7 +153,10 @@ class Bot {
 				messagetoSend += ' ' + key + ',';
 			}
 
-			messagetoSend = messagetoSend.substring(0, str.length - 1);
+			messagetoSend = messagetoSend.substring(
+				0,
+				messagetoSend.length - 1
+			);
 
 			this.logger.log('list of faq keys was requested');
 
