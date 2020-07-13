@@ -28,6 +28,7 @@ class Bot {
 			'Da haben deine Mutter und ich bereits drüber gesprochen. Wir sind anderer Meinung.',
 			'Da hat er Recht. Oh, Fehler festgestellt. Leite Reparatur- und Salbungsprotokolle sein.',
 			'Ja, klar. Aber nur wenn die Zeit nicht mehr linear verläuft.',
+			'Sie sehen gut aus, Sir. Heute schon gekotzt?',
 		];
 	}
 
