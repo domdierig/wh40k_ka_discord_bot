@@ -232,8 +232,6 @@ class Bot {
 			}
 
 			if (message.author.username === 'Das Scheusal') {
-				console.log(message.author);
-
 				const hit = Math.random() * (1001 - 1) + 1;
 
 				if (hit <= this.answerUliUpperBoundary) {
