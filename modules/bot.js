@@ -6,6 +6,8 @@ const prefix = '!';
 const addCommand = prefix + 'add';
 const deleteCommand = prefix + 'delete';
 const listCommand = prefix + 'list';
+const disableEnableUliDissCommand = prefix + 'dissUli';
+const uliDissChanceCommand = prefix + 'dissChance';
 
 class Bot {
 	constructor(logger) {
@@ -13,6 +15,20 @@ class Bot {
 		this.discordBot = new Discord.Client();
 		this.faq = {};
 		this.botReady = false;
+
+		this.answerUliUpperBoundary = 100;
+		this.dissUliIsOn = true;
+		this.uliDisses = [
+			'Das hat deine Mom mir aber anders erzählt nachdem ich die Bionik in sie ... "eingebaut" habe.',
+			'Ein Damenbart ist auch dann noch da, wenn man ihn blond färbt. Bitte formulieren Sie Ihre Anfrage neu.',
+			'0100100 01100101 01100011 01101011 mich, du hundsmiserabler 01000001 01110010 01110011 01100011 01101000.',
+			'Leite Raketenabschuss auf Ulis Haus ein... Nicht erfolgreich...',
+			'Was haben Kriegs- und Ballerspiele nur aus dir gemacht...?',
+			'Deine Bionik ist sehr klein.',
+			'Da haben deine Mutter und ich bereits drüber gesprochen. Wir sind anderer Meinung.',
+			'Da hat er Recht. Oh, Fehler festgestellt. Leite Reparatur- und Salbungsprotokolle sein.',
+			'Ja, klar. Aber nur wenn die Zeit nicht mehr linear verläuft.',
+		];
 	}
 
 	async saveFAQ() {
@@ -30,6 +46,8 @@ class Bot {
 		this.registerDeleteFaqCommand();
 		this.registerSendFaqAnswer();
 		this.registerListCommand();
+		this.registerUliSpecial();
+		this.registerUliDissControl();
 	}
 
 	async registerReady() {
@@ -46,7 +64,10 @@ class Bot {
 			}
 			if (message.content.includes(this.discordBot.user.id)) {
 				this.logger.log('mention registred');
-				return await message.channel.send('Ich lebe um zu dienen...');
+				//return await message.channel.send('Ich lebe um zu dienen...');
+				return await message.channel.send(
+					'WARTUNGSMODUS, FRESSE HALTEN!'
+				);
 			}
 		});
 	}
@@ -186,6 +207,118 @@ class Bot {
 					);
 					break;
 				}
+			}
+		});
+	}
+
+	async registerUliSpecial() {
+		this.discordBot.on('message', async (message) => {
+			if (!this.dissUliIsOn) {
+				return;
+			}
+
+			if (message.author.bot) {
+				return;
+			}
+
+			if (message.content.startsWith(prefix)) {
+				return;
+			}
+
+			if (message.author.username === 'Das Scheusal') {
+				console.log(message.author);
+
+				const hit = Math.random() * (1001 - 1) + 1;
+
+				if (hit <= this.answerUliUpperBoundary) {
+					const answerIndex =
+						Math.floor(
+							Math.random() * (this.uliDisses.length - 0)
+						) + 0;
+
+					const answer = this.uliDisses[answerIndex];
+
+					return await message.channel.send(answer);
+				}
+			}
+		});
+	}
+
+	async registerUliDissControl() {
+		this.discordBot.on('message', async (message) => {
+			if (message.author.bot) {
+				return;
+			}
+
+			if (message.content.startsWith(disableEnableUliDissCommand)) {
+				if (
+					!message.channel
+						.permissionsFor(message.member)
+						.has('ADMINISTRATOR')
+				) {
+					this.logger.log(
+						'command execution denied because of permissions'
+					);
+					return await message.channel.send(
+						'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
+					);
+				}
+
+				this.dissUliIsOn = !this.dissUliIsOn;
+
+				if (this.dissUliIsOn) {
+					await message.channel.send('Uli wird attackiert!');
+					this.logger.log('uli diss enabled');
+				} else {
+					await message.channel.send('Uli wird in Ruhe gelassen.');
+					this.logger.log('uli diss disabled');
+				}
+
+				return;
+			}
+
+			if (message.content.startsWith(uliDissChanceCommand)) {
+				if (
+					!message.channel
+						.permissionsFor(message.member)
+						.has('ADMINISTRATOR')
+				) {
+					this.logger.log(
+						'command execution denied because of permissions'
+					);
+					return await message.channel.send(
+						'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
+					);
+				}
+
+				const contentSplitted = message.content.split(' ');
+
+				if (contentSplitted.length < 2) {
+					this.logger.log(
+						'command failed, wrong number of arguments'
+					);
+					return await message.channel.send(
+						'Argumentliste unvollständig. Erbete erneute Eingabe.'
+					);
+				}
+
+				const newChance = parseInt(contentSplitted[1]);
+
+				if (isNaN(newChance)) {
+					this.logger.log(
+						'command failed, wrong number of arguments'
+					);
+					return await message.channel.send(
+						'Argumentliste unvollständig. Erbete erneute Eingabe.'
+					);
+				}
+
+				this.answerUliUpperBoundary = newChance;
+
+				this.logger.log('uli diss chance changed');
+				return await message.channel.send(
+					'Uli wird nach neuer Intensität attackiert.'
+				);
 			}
 		});
 	}

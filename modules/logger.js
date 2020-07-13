@@ -14,8 +14,15 @@ class Logger {
 		);
 	}
 
+	logUliChance(rolled, upperBoundary) {
+		console.log(
+			this.getTime(),
+			`random number was ${rolled}, upper boundary is ${upperBoundary}`
+		);
+	}
+
 	getTime() {
-		return moment().format('HH:mm :');
+		return moment().format('DD.MM.YYYY - HH:mm :');
 	}
 }
 
