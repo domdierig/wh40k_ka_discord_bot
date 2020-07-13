@@ -47,7 +47,7 @@ class Bot {
 		this.registerSendFaqAnswer();
 		this.registerListCommand();
 		this.registerUliSpecial();
-		this.registerUliDissControl();
+		this.registerUliSpecialControl();
 	}
 
 	async registerReady() {
@@ -198,7 +198,11 @@ class Bot {
 			const content = message.content.toLowerCase();
 
 			for (const key in this.faq) {
-				if (content.includes(key)) {
+				if (
+					content.includes(' ' + key + ' ') ||
+					content.startsWith(key + ' ') ||
+					content.endsWith(' ' + key)
+				) {
 					await message.channel.send(this.faq[key]);
 					this.logger.logBotFAQ(
 						'faq message send',
@@ -244,7 +248,7 @@ class Bot {
 		});
 	}
 
-	async registerUliDissControl() {
+	async registerUliSpecialControl() {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
