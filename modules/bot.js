@@ -201,7 +201,8 @@ class Bot {
 				if (
 					content.includes(' ' + key + ' ') ||
 					content.startsWith(key + ' ') ||
-					content.endsWith(' ' + key)
+					content.endsWith(' ' + key) ||
+					content === key
 				) {
 					await message.channel.send(this.faq[key]);
 					this.logger.logBotFAQ(
