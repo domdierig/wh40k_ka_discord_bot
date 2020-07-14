@@ -22,7 +22,7 @@ class Bot {
 			'Das hat deine Mom mir aber anders erzählt nachdem ich die Bionik in sie ... "eingebaut" habe.',
 			'Ein Damenbart ist auch dann noch da, wenn man ihn blond färbt. Bitte formulieren Sie Ihre Anfrage neu.',
 			'0100100 01100101 01100011 01101011 mich, du hundsmiserabler 01000001 01110010 01110011 01100011 01101000.',
-			'Leite Raketenabschuss auf Ulis Haus ein... Nicht erfolgreich...',
+			'Leite Raketenabschuss ein. Authorisierung: **Ziel gewählt: Ulis Haus. Abschusscode eingeben: ** Status: Nicht erfolgreich.',
 			'Was haben Kriegs- und Ballerspiele nur aus dir gemacht...?',
 			'Deine Bionik ist sehr klein.',
 			'Da haben deine Mutter und ich bereits drüber gesprochen. Wir sind anderer Meinung.',
