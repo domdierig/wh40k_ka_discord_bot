@@ -1,6 +1,8 @@
-const Discord = require('discord.js');
-const writeJsonFile = require('write-json-file');
-const loadJsonFile = require('load-json-file');
+import Discord from 'discord.js';
+
+import writeJsonFile from 'write-json-file';
+import loadJsonFile from 'load-json-file';
+import { Logger } from './logger';
 
 const prefix = '!';
 const addCommand = prefix + 'add';
@@ -9,8 +11,16 @@ const listCommand = prefix + 'list';
 const disableEnableUliDissCommand = prefix + 'dissUli';
 const uliDissChanceCommand = prefix + 'dissChance';
 
-class Bot {
-	constructor(logger) {
+export default class Bot {
+	logger: Logger;
+	discordBot: Discord.Client;
+	faq: any;
+	botReady: boolean;
+	answerUliUpperBoundary: number;
+	dissUliIsOn: boolean;
+	uliDisses: string[];
+
+	constructor(logger: Logger) {
 		this.logger = logger;
 		this.discordBot = new Discord.Client();
 		this.faq = {};
@@ -32,11 +42,11 @@ class Bot {
 		];
 	}
 
-	async saveFAQ() {
+	async saveFAQ(): Promise<void> {
 		await writeJsonFile('faq.json', this.faq);
 	}
 
-	async init() {
+	async init(): Promise<void> {
 		this.discordBot.login(process.env.BOT_TOKEN);
 
 		this.faq = await loadJsonFile('faq.json');
@@ -51,14 +61,14 @@ class Bot {
 		this.registerUliSpecialControl();
 	}
 
-	async registerReady() {
+	async registerReady(): Promise<void> {
 		this.discordBot.on('ready', async () => {
 			this.botReady = true;
 			this.logger.log('bot online');
 		});
 	}
 
-	async registerBotMention() {
+	async registerBotMention(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
@@ -73,7 +83,7 @@ class Bot {
 		});
 	}
 
-	async registerAddFaqCommand() {
+	async registerAddFaqCommand(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
@@ -83,11 +93,7 @@ class Bot {
 				return;
 			}
 
-			if (
-				!message.channel
-					.permissionsFor(message.member)
-					.has('ADMINISTRATOR')
-			) {
+			if (!message.member.hasPermission('ADMINISTRATOR')) {
 				this.logger.log(
 					'command execution denied because of permissions'
 				);
@@ -119,7 +125,7 @@ class Bot {
 		});
 	}
 
-	async registerDeleteFaqCommand() {
+	async registerDeleteFaqCommand(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
@@ -129,11 +135,7 @@ class Bot {
 				return;
 			}
 
-			if (
-				!message.channel
-					.permissionsFor(message.member)
-					.has('ADMINISTRATOR')
-			) {
+			if (!message.member.hasPermission('ADMINISTRATOR')) {
 				this.logger.log(
 					'command execution denied because of permissions'
 				);
@@ -158,7 +160,7 @@ class Bot {
 		});
 	}
 
-	async registerListCommand() {
+	async registerListCommand(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
@@ -186,7 +188,7 @@ class Bot {
 		});
 	}
 
-	async registerSendFaqAnswer() {
+	async registerSendFaqAnswer(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
@@ -217,7 +219,7 @@ class Bot {
 		});
 	}
 
-	async registerUliSpecial() {
+	async registerUliSpecial(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (!this.dissUliIsOn) {
 				return;
@@ -248,18 +250,14 @@ class Bot {
 		});
 	}
 
-	async registerUliSpecialControl() {
+	async registerUliSpecialControl(): Promise<void> {
 		this.discordBot.on('message', async (message) => {
 			if (message.author.bot) {
 				return;
 			}
 
 			if (message.content.startsWith(disableEnableUliDissCommand)) {
-				if (
-					!message.channel
-						.permissionsFor(message.member)
-						.has('ADMINISTRATOR')
-				) {
+				if (!message.member.hasPermission('ADMINISTRATOR')) {
 					this.logger.log(
 						'command execution denied because of permissions'
 					);
@@ -282,11 +280,7 @@ class Bot {
 			}
 
 			if (message.content.startsWith(uliDissChanceCommand)) {
-				if (
-					!message.channel
-						.permissionsFor(message.member)
-						.has('ADMINISTRATOR')
-				) {
+				if (!message.member.hasPermission('ADMINISTRATOR')) {
 					this.logger.log(
 						'command execution denied because of permissions'
 					);
@@ -326,14 +320,4 @@ class Bot {
 			}
 		});
 	}
-
-	async sendMessageToChannel(channelId, message) {
-		if (this.botReady) {
-			this.discordBot.channels.fetch(channelId).then(async (channel) => {
-				await channel.send(message);
-			});
-		}
-	}
 }
-
-module.exports = Bot;

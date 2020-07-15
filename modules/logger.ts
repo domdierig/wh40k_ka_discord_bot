@@ -1,31 +1,31 @@
-const moment = require('moment');
+import moment from 'moment';
 
-class Logger {
+export class Logger {
 	constructor() {}
 
-	log(message) {
+	log(message: string): void {
 		console.log(this.getTime(), message);
 	}
 
-	logBotFAQ(message, key, phrase) {
+	logBotFAQ(message: string, key: string, phrase: string): void {
 		console.log(
 			this.getTime(),
 			`${message}, key: ${key}, phrase: ${phrase}`
 		);
 	}
 
-	logUliChance(rolled, upperBoundary) {
+	logUliChance(rolled: number, upperBoundary: number): void {
 		console.log(
 			this.getTime(),
 			`random number was ${rolled}, upper boundary is ${upperBoundary}`
 		);
 	}
 
-	getTime() {
+	getTime(): string {
 		return moment().format('DD.MM.YYYY - HH:mm :');
 	}
 }
 
 const logger = new Logger();
 
-module.exports = logger;
+export default logger;

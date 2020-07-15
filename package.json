@@ -2,9 +2,11 @@
 	"name": "wh40k-ka-discord-bot",
 	"version": "0.0.2",
 	"description": "",
-	"main": "app.js",
+	"main": "bin/app.js",
 	"scripts": {
-		"start": "nodemon"
+		"start": "yarn compile && node bin/app.js",
+		"compile": "tsc",
+		"dev": "nodemon -e ts --exec \"yarn start\""
 	},
 	"dependencies": {
 		"discord.js": "12.2.0",
@@ -12,10 +14,12 @@
 		"load-json-file": "6.2.0",
 		"dotenv": "8.2.0",
 		"nodemon": "2.0.4",
-		"moment": "2.27.0"
+		"moment": "2.27.0",
+		"typescript": "3.9.6",
+		"@types/node": "12.12.2"
 	},
 	"engines": {
-		"node": "12.x"
+		"node": "14.x"
 	},
 	"repository": {},
 	"license": "MIT",
