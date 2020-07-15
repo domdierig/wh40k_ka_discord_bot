@@ -75,10 +75,17 @@ export default class Bot {
 			}
 			if (message.content.includes(this.discordBot.user.id)) {
 				this.logger.log('mention registred');
-				return await message.channel.send('Ich lebe um zu dienen...');
-				// return await message.channel.send(
-				// 	'WARTUNGSMODUS, FRESSE HALTEN!'
-				// );
+				if (process.env.NODE_ENV === 'prod') {
+					return await message.channel.send(
+						'Ich lebe um zu dienen...'
+					);
+				}
+				if (process.env.NODE_ENV === 'dev') {
+					return await message.channel.send(
+						'WARTUNGSMODUS, FRESSE HALTEN!'
+					);
+				}
+				return;
 			}
 		});
 	}

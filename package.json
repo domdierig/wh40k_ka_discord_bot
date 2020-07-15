@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "bin/app.js",
 	"scripts": {
-		"start": "yarn compile && node bin/app.js",
-		"compile": "tsc",
-		"dev": "nodemon -e ts --exec \"yarn start\""
+		"start-dev": "set NODE_ENV=\"dev\" && yarn start",
+		"start-prod": "set NODE_ENV=\"prod\" && yarn start",
+		"start": "nodemon -e ts --exec \"yarn compile-and-start\"",
+		"compile-and-start": "tsc && node bin/app.js"
 	},
 	"dependencies": {
 		"discord.js": "12.2.0",
