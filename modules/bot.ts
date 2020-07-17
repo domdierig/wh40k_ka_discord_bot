@@ -85,7 +85,6 @@ export default class Bot {
 						'WARTUNGSMODUS, FRESSE HALTEN!'
 					);
 				}
-				return;
 			}
 		});
 	}

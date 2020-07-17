@@ -4,8 +4,6 @@
 	"description": "",
 	"main": "bin/app.js",
 	"scripts": {
-		"start-dev": "set NODE_ENV=\"dev\" && yarn start",
-		"start-prod": "set NODE_ENV=\"prod\" && yarn start",
 		"start": "nodemon -e ts --exec \"yarn compile-and-start\"",
 		"compile-and-start": "tsc && node bin/app.js"
 	},
