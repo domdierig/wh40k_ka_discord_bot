@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "bin/app.js",
 	"scripts": {
-		"start": "nodemon -e ts --exec \"yarn compile-and-start\"",
+		"start": "nodemon -e ts --exec \"npm run compile-and-start\"",
 		"compile-and-start": "tsc && node bin/app.js"
 	},
 	"dependencies": {
