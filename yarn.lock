@@ -32,7 +32,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/collection@npm:^0.1.5":
+"@discordjs/collection@npm:^0.1.6":
   version: 0.1.6
   resolution: "@discordjs/collection@npm:0.1.6"
   checksum: da87faf9975e9320a4aa5e8a78312849e4767eb5b0c3348612a0f2d07b5bad4bb91c8c65a5a8ffecc007574c5eebd4790d2e13880af6fd2ae865ba3161495f9a
@@ -82,10 +82,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:12.12.2":
+"@types/node@npm:*":
   version: 12.12.2
   resolution: "@types/node@npm:12.12.2"
   checksum: 799bf7296d3bf9c5e258395d2b3d0b4e5eefb563fd29b7a142a7be3a17e26bb21bac03d8f6aab0b89177d50fba4b84dd33774929a5bf4e00787f4661d1bce338
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^14.6.4":
+  version: 14.6.4
+  resolution: "@types/node@npm:14.6.4"
+  checksum: bff274e362080628c96e51b1948be668b68117e35d6353691c753052e490efc0934a0c0a3ba5d2739ac70e745932a9f6b049b7d01a1d96c9ae0c93c3b1b88ed0
   languageName: node
   linkType: hard
 
@@ -557,39 +564,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:12.2.0":
-  version: 12.2.0
-  resolution: "discord.js@npm:12.2.0"
+"discord.js@npm:^12.3.1":
+  version: 12.3.1
+  resolution: "discord.js@npm:12.3.1"
   dependencies:
-    "@discordjs/collection": ^0.1.5
+    "@discordjs/collection": ^0.1.6
     "@discordjs/form-data": ^3.0.1
     abort-controller: ^3.0.0
     node-fetch: ^2.6.0
-    prism-media: ^1.2.0
+    prism-media: ^1.2.2
     setimmediate: ^1.0.5
     tweetnacl: ^1.0.3
-    ws: ^7.2.1
-  peerDependencies:
-    bufferutil: ^4.0.1
-    erlpack: "*"
-    libsodium-wrappers: ^0.7.6
-    sodium: ^3.0.2
-    utf-8-validate: ^5.0.2
-    zlib-sync: ^0.1.6
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    erlpack:
-      optional: true
-    libsodium-wrappers:
-      optional: true
-    sodium:
-      optional: true
-    utf-8-validate:
-      optional: true
-    zlib-sync:
-      optional: true
-  checksum: c3c2620a27b88dde6497f2eca6840fbdc370b823326ad9d2dcc1bcaf327f658547e7b8c9ce4e1dd5c9af93863328e59867befe9ee4682f9f57e8d72fc4f53fd4
+    ws: ^7.3.1
+  checksum: ecb9eae99aedba43d46bd9947ec71617c202091b4a8e3a024fbc6b7803fc1b5dee2977277ada8ef5a9c2c8e65d15053d66c07f4420ad64af47363c640bcb13bb
   languageName: node
   linkType: hard
 
@@ -602,7 +589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:8.2.0":
+"dotenv@npm:^8.2.0":
   version: 8.2.0
   resolution: "dotenv@npm:8.2.0"
   checksum: 16cb89cbd7b98b053899b8aba8c5044c8fb61a2db8a81fe70360b75035fce5fed53bd7a34d772be717d0880c0321122a4c09423f518025e1b52d96791521b1a7
@@ -1216,7 +1203,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"load-json-file@npm:6.2.0":
+"load-json-file@npm:^6.2.0":
   version: 6.2.0
   resolution: "load-json-file@npm:6.2.0"
   dependencies:
@@ -1318,7 +1305,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"moment@npm:2.27.0":
+"moment@npm:^2.27.0":
   version: 2.27.0
   resolution: "moment@npm:2.27.0"
   checksum: 72d9a7d8dba59e3d538440cdc0b59fa895b123361e370be231896478aaf157a484355ce32bd8daf6f731d6d1636d3a67ecb67531e536e093ca18b43e0cbae194
@@ -1366,7 +1353,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"nodemon@npm:2.0.4":
+"nodemon@npm:^2.0.4":
   version: 2.0.4
   resolution: "nodemon@npm:2.0.4"
   dependencies:
@@ -1548,7 +1535,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"prism-media@npm:^1.2.0":
+"prism-media@npm:^1.2.2":
   version: 1.2.2
   resolution: "prism-media@npm:1.2.2"
   peerDependencies:
@@ -2040,23 +2027,23 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-typescript@3.9.6:
-  version: 3.9.6
-  resolution: "typescript@npm:3.9.6"
+typescript@^4.0.2:
+  version: 4.0.2
+  resolution: "typescript@npm:4.0.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 75d8e3610ca435b0feaa3eb714ef3aa9060ec72621da3c62c45ceee1d8d0ddcbd8ff2a816de2d24ab28dcd2249953edb640d34595d59e491656156da4c2903fc
+  checksum: cc0e7806eee7997a1b4b2990badacc4a8d089893ed0a377f35c9658e2ac392503cb340d0187203ed82e36e427dda94b0fb7107e44a71cca99efac86be26e16ee
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@3.9.6#builtin<compat/typescript>":
-  version: 3.9.6
-  resolution: "typescript@patch:typescript@npm%3A3.9.6#builtin<compat/typescript>::version=3.9.6&hash=5b02a2"
+"typescript@patch:typescript@^4.0.2#builtin<compat/typescript>":
+  version: 4.0.2
+  resolution: "typescript@patch:typescript@npm%3A4.0.2#builtin<compat/typescript>::version=4.0.2&hash=5b02a2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: de0b64b2df571ddb6a87e058605b011b1d7e2ed5e1bb27ba658251a380041abbbdf5bdf8da25d5605ac84e7fb3882a816b9a283ffaddedebfde1a57db4c18c30
+  checksum: b8b689ef994cce4fe59950d56ddfffce3c4bdda8edb85b72e752d4a6d27bf7df8a318e76ccde25cbe6e642058f2f4ccf47187db4b243bbc98278a2844db9461b
   languageName: node
   linkType: hard
 
@@ -2148,14 +2135,14 @@ typescript@3.9.6:
   version: 0.0.0-use.local
   resolution: "wh40k-ka-discord-bot@workspace:."
   dependencies:
-    "@types/node": 12.12.2
-    discord.js: 12.2.0
-    dotenv: 8.2.0
-    load-json-file: 6.2.0
-    moment: 2.27.0
-    nodemon: 2.0.4
-    typescript: 3.9.6
-    write-json-file: 4.3.0
+    "@types/node": ^14.6.4
+    discord.js: ^12.3.1
+    dotenv: ^8.2.0
+    load-json-file: ^6.2.0
+    moment: ^2.27.0
+    nodemon: ^2.0.4
+    typescript: ^4.0.2
+    write-json-file: ^4.3.0
   languageName: unknown
   linkType: soft
 
@@ -2207,7 +2194,7 @@ typescript@3.9.6:
   languageName: node
   linkType: hard
 
-"write-json-file@npm:4.3.0":
+"write-json-file@npm:^4.3.0":
   version: 4.3.0
   resolution: "write-json-file@npm:4.3.0"
   dependencies:
@@ -2221,7 +2208,7 @@ typescript@3.9.6:
   languageName: node
   linkType: hard
 
-"ws@npm:^7.2.1":
+"ws@npm:^7.3.1":
   version: 7.3.1
   resolution: "ws@npm:7.3.1"
   peerDependencies:
