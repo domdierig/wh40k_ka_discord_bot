@@ -7,7 +7,8 @@
 		"compile": "tsc",
 		"start": "yarn nodemon -e ts --exec \"yarn compile-and-start\"",
 		"dev": "yarn nodemon -e ts --exec \"tsc\"",
-		"compile-and-start": "tsc && node bin/app.js"
+		"compile-and-start": "tsc && node bin/app.js",
+		"startnpm": "nodemon -e ts --exec \"npm run compile-and-start\""
 	},
 	"dependencies": {
 		"@types/node": "^14.6.4",
