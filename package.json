@@ -5,8 +5,7 @@
 	"main": "bin/app.js",
 	"scripts": {
 		"compile": "tsc",
-		"start": "yarn nodemon -e ts --exec \"yarn compile-and-start\"",
-		"dev": "yarn nodemon -e ts --exec \"tsc\"",
+		"dev": "yarn nodemon -e ts --exec \"yarn compile\"",
 		"compile-and-start": "tsc && node bin/app.js",
 		"startnpm": "nodemon -e ts --exec \"npm run compile-and-start\""
 	},
