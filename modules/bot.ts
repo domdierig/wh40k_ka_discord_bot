@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import Discord, { TextChannel } from 'discord.js';
 
 import writeJsonFile from 'write-json-file';
 import loadJsonFile from 'load-json-file';
@@ -8,8 +8,6 @@ const prefix = '!';
 const addCommand = prefix + 'add';
 const deleteCommand = prefix + 'delete';
 const listCommand = prefix + 'list';
-const disableEnableUliDissCommand = prefix + 'dissUli';
-const uliDissChanceCommand = prefix + 'dissChance';
 
 export default class Bot {
 	logger: Logger;
@@ -25,21 +23,6 @@ export default class Bot {
 		this.discordBot = new Discord.Client();
 		this.faq = {};
 		this.botReady = false;
-
-		this.answerUliUpperBoundary = 100;
-		this.dissUliIsOn = true;
-		this.uliDisses = [
-			'Das hat deine Mom mir aber anders erzählt nachdem ich die Bionik in sie ... "eingebaut" habe.',
-			'Ein Damenbart ist auch dann noch da, wenn man ihn blond färbt. Bitte formulieren Sie Ihre Anfrage neu.',
-			'0100100 01100101 01100011 01101011 mich, du hundsmiserabler 01000001 01110010 01110011 01100011 01101000.',
-			'Leite Raketenabschuss ein. Authorisierung: **Ziel gewählt: Ulis Haus. Abschusscode eingeben: ** Status: Nicht erfolgreich.',
-			'Was haben Kriegs- und Ballerspiele nur aus dir gemacht...?',
-			'Deine Bionik ist sehr klein.',
-			'Da haben deine Mutter und ich bereits drüber gesprochen. Wir sind anderer Meinung.',
-			'Da hat er Recht. Oh, Fehler festgestellt. Leite Reparatur- und Salbungsprotokolle sein.',
-			'Ja, klar. Aber nur wenn die Zeit nicht mehr linear verläuft.',
-			'Sie sehen gut aus, Sir. Heute schon gekotzt?',
-		];
 	}
 
 	async saveFAQ(): Promise<void> {
@@ -57,8 +40,6 @@ export default class Bot {
 		this.registerDeleteFaqCommand();
 		this.registerSendFaqAnswer();
 		this.registerListCommand();
-		this.registerUliSpecial();
-		this.registerUliSpecialControl();
 	}
 
 	async registerReady(): Promise<void> {
@@ -200,6 +181,18 @@ export default class Bot {
 				return;
 			}
 
+			const channelId: string = message.channel.id;
+			//724548288295993424 channel off-topic
+			//724558659086057532 channel everything-warhammer
+			//719556531787399169 channel adminchannel
+			if (
+				channelId !== '724548288295993424' &&
+				channelId !== '724558659086057532' &&
+				channelId !== '719556531787399169'
+			) {
+				return;
+			}
+
 			if (message.content.startsWith(prefix)) {
 				return;
 			}
@@ -221,108 +214,6 @@ export default class Bot {
 					);
 					break;
 				}
-			}
-		});
-	}
-
-	async registerUliSpecial(): Promise<void> {
-		this.discordBot.on('message', async (message) => {
-			if (!this.dissUliIsOn) {
-				return;
-			}
-
-			if (message.author.bot) {
-				return;
-			}
-
-			if (message.content.startsWith(prefix)) {
-				return;
-			}
-
-			if (message.author.username === 'Das Scheusal') {
-				const hit = Math.random() * (1001 - 1) + 1;
-
-				if (hit <= this.answerUliUpperBoundary) {
-					const answerIndex =
-						Math.floor(
-							Math.random() * (this.uliDisses.length - 0)
-						) + 0;
-
-					const answer = this.uliDisses[answerIndex];
-
-					return await message.channel.send(answer);
-				}
-			}
-		});
-	}
-
-	async registerUliSpecialControl(): Promise<void> {
-		this.discordBot.on('message', async (message) => {
-			if (message.author.bot) {
-				return;
-			}
-
-			if (message.content.startsWith(disableEnableUliDissCommand)) {
-				if (!message.member.hasPermission('ADMINISTRATOR')) {
-					this.logger.log(
-						'command execution denied because of permissions'
-					);
-					return await message.channel.send(
-						'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
-					);
-				}
-
-				this.dissUliIsOn = !this.dissUliIsOn;
-
-				if (this.dissUliIsOn) {
-					await message.channel.send('Uli wird attackiert!');
-					this.logger.log('uli diss enabled');
-				} else {
-					await message.channel.send('Uli wird in Ruhe gelassen.');
-					this.logger.log('uli diss disabled');
-				}
-
-				return;
-			}
-
-			if (message.content.startsWith(uliDissChanceCommand)) {
-				if (!message.member.hasPermission('ADMINISTRATOR')) {
-					this.logger.log(
-						'command execution denied because of permissions'
-					);
-					return await message.channel.send(
-						'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
-					);
-				}
-
-				const contentSplitted = message.content.split(' ');
-
-				if (contentSplitted.length < 2) {
-					this.logger.log(
-						'command failed, wrong number of arguments'
-					);
-					return await message.channel.send(
-						'Argumentliste unvollständig. Erbete erneute Eingabe.'
-					);
-				}
-
-				const newChance = parseInt(contentSplitted[1]);
-
-				if (isNaN(newChance)) {
-					this.logger.log(
-						'command failed, wrong number of arguments'
-					);
-					return await message.channel.send(
-						'Argumentliste unvollständig. Erbete erneute Eingabe.'
-					);
-				}
-
-				this.answerUliUpperBoundary = newChance;
-
-				this.logger.log('uli diss chance changed');
-				return await message.channel.send(
-					'Uli wird nach neuer Intensität attackiert.'
-				);
 			}
 		});
 	}
