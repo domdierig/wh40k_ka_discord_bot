@@ -3,3 +3,4 @@ node_modules
 faq.json
 .vscode
 bin
+.yarn

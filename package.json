@@ -5,18 +5,18 @@
 	"main": "bin/app.js",
 	"scripts": {
 		"compile": "tsc",
-		"start": "nodemon -e ts --exec \"npm run compile-and-start\"",
+		"start": "yarn nodemon -e ts --exec \"npm run compile-and-start\"",
 		"compile-and-start": "tsc && node bin/app.js"
 	},
 	"dependencies": {
+		"@types/node": "12.12.2",
 		"discord.js": "12.2.0",
-		"write-json-file": "4.3.0",
-		"load-json-file": "6.2.0",
 		"dotenv": "8.2.0",
-		"nodemon": "2.0.4",
+		"load-json-file": "6.2.0",
 		"moment": "2.27.0",
+		"nodemon": "2.0.4",
 		"typescript": "3.9.6",
-		"@types/node": "12.12.2"
+		"write-json-file": "4.3.0"
 	},
 	"engines": {
 		"node": "14.x"
