@@ -1,8 +1,7 @@
-import Discord, { TextChannel } from 'discord.js';
-
+import Discord from 'discord.js';
 import writeJsonFile from 'write-json-file';
 import loadJsonFile from 'load-json-file';
-import { Logger } from './logger';
+import logger from './logger';
 
 const prefix = '!';
 const addCommand = prefix + 'add';
@@ -10,7 +9,6 @@ const deleteCommand = prefix + 'delete';
 const listCommand = prefix + 'list';
 
 export default class Bot {
-	logger: Logger;
 	discordBot: Discord.Client;
 	faq: any;
 	botReady: boolean;
@@ -18,8 +16,7 @@ export default class Bot {
 	dissUliIsOn: boolean;
 	uliDisses: string[];
 
-	constructor(logger: Logger) {
-		this.logger = logger;
+	constructor() {
 		this.discordBot = new Discord.Client();
 		this.faq = {};
 		this.botReady = false;
@@ -45,7 +42,7 @@ export default class Bot {
 	async registerReady(): Promise<void> {
 		this.discordBot.on('ready', async () => {
 			this.botReady = true;
-			this.logger.log('bot online');
+			logger.log('bot online');
 		});
 	}
 
@@ -55,16 +52,12 @@ export default class Bot {
 				return;
 			}
 			if (message.content.includes(this.discordBot.user.id)) {
-				this.logger.log('mention registred');
+				logger.log('mention registred');
 				if (process.env.NODE_ENV === 'prod') {
-					return await message.channel.send(
-						'Ich lebe um zu dienen...'
-					);
+					return await message.channel.send('Ich lebe um zu dienen...');
 				}
 				if (process.env.NODE_ENV === 'dev') {
-					return await message.channel.send(
-						'WARTUNGSMODUS, FRESSE HALTEN!'
-					);
+					return await message.channel.send('WARTUNGSMODUS, FRESSE HALTEN!');
 				}
 			}
 		});
@@ -81,23 +74,15 @@ export default class Bot {
 			}
 
 			if (!message.member.hasPermission('ADMINISTRATOR')) {
-				this.logger.log(
-					'command execution denied because of permissions'
-				);
-				return await message.channel.send(
-					'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
-				);
+				logger.log('command execution denied because of permissions');
+				return await message.channel.send('Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.');
 			}
 
-			const content = message.content
-				.substring(addCommand.length + 1)
-				.split(' - ');
+			const content = message.content.substring(addCommand.length + 1).split(' - ');
 
 			if (content.length < 2) {
-				this.logger.log('command failed, wrong number of arguments');
-				return await message.channel.send(
-					'Argumentliste unvollständig. Erbete erneute Eingabe.'
-				);
+				logger.log('command failed, wrong number of arguments');
+				return await message.channel.send('Argumentliste unvollständig. Erbete erneute Eingabe.');
 			}
 
 			const key = content[0].toLowerCase();
@@ -107,7 +92,7 @@ export default class Bot {
 
 			await writeJsonFile('faq.json', this.faq);
 
-			this.logger.logBotFAQ('new faq message', key, phrase);
+			logger.logBotFAQ('new faq message', key, phrase);
 			return await message.channel.send('Kommando ausgeführt.');
 		});
 	}
@@ -123,17 +108,11 @@ export default class Bot {
 			}
 
 			if (!message.member.hasPermission('ADMINISTRATOR')) {
-				this.logger.log(
-					'command execution denied because of permissions'
-				);
-				return await message.channel.send(
-					'Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.'
-				);
+				logger.log('command execution denied because of permissions');
+				return await message.channel.send('Du verfügst nicht über die nötigen Zugangsrechte um dieses Kommando auszuführen.');
 			}
 
-			const content = message.content
-				.substring(deleteCommand.length + 1)
-				.toLowerCase();
+			const content = message.content.substring(deleteCommand.length + 1).toLowerCase();
 
 			let phraseDeleted = this.faq[content];
 
@@ -141,7 +120,7 @@ export default class Bot {
 
 			await writeJsonFile('faq.json', this.faq);
 
-			this.logger.logBotFAQ('faq entry deleted', content, phraseDeleted);
+			logger.logBotFAQ('faq entry deleted', content, phraseDeleted);
 
 			return await message.channel.send('Kommando ausgeführt.');
 		});
@@ -157,19 +136,15 @@ export default class Bot {
 				return;
 			}
 
-			let messagetoSend =
-				'Nach meiner aktuellen Konfiguration reagiere ich auf folgende Trigger:';
+			let messagetoSend = 'Nach meiner aktuellen Konfiguration reagiere ich auf folgende Trigger:';
 
 			for (const key in this.faq) {
 				messagetoSend += ' ' + key + ',';
 			}
 
-			messagetoSend = messagetoSend.substring(
-				0,
-				messagetoSend.length - 1
-			);
+			messagetoSend = messagetoSend.substring(0, messagetoSend.length - 1);
 
-			this.logger.log('list of faq keys was requested');
+			logger.log('list of faq keys was requested');
 
 			return await message.channel.send(messagetoSend);
 		});
@@ -185,11 +160,7 @@ export default class Bot {
 			//724548288295993424 channel off-topic
 			//724558659086057532 channel everything-warhammer
 			//719556531787399169 channel adminchannel
-			if (
-				channelId !== '724548288295993424' &&
-				channelId !== '724558659086057532' &&
-				channelId !== '719556531787399169'
-			) {
+			if (channelId !== '724548288295993424' && channelId !== '724558659086057532' && channelId !== '719556531787399169') {
 				return;
 			}
 
@@ -200,18 +171,9 @@ export default class Bot {
 			const content = message.content.toLowerCase();
 
 			for (const key in this.faq) {
-				if (
-					content.includes(' ' + key + ' ') ||
-					content.startsWith(key + ' ') ||
-					content.endsWith(' ' + key) ||
-					content === key
-				) {
+				if (content.includes(' ' + key + ' ') || content.startsWith(key + ' ') || content.endsWith(' ' + key) || content === key) {
 					await message.channel.send(this.faq[key]);
-					this.logger.logBotFAQ(
-						'faq message send',
-						key,
-						this.faq[key]
-					);
+					logger.logBotFAQ('faq message send', key, this.faq[key]);
 					break;
 				}
 			}

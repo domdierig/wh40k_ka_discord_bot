@@ -8,17 +8,7 @@ export class Logger {
 	}
 
 	logBotFAQ(message: string, key: string, phrase: string): void {
-		console.log(
-			this.getTime(),
-			`${message}, key: ${key}, phrase: ${phrase}`
-		);
-	}
-
-	logUliChance(rolled: number, upperBoundary: number): void {
-		console.log(
-			this.getTime(),
-			`random number was ${rolled}, upper boundary is ${upperBoundary}`
-		);
+		console.log(this.getTime(), `${message}, key: ${key}, phrase: ${phrase}`);
 	}
 
 	getTime(): string {
