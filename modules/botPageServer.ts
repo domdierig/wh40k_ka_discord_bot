@@ -7,7 +7,7 @@ export default class BotPageServer {
 
 	constructor() {
 		this.server = express();
-		this.port = process.env.NODE_ENV === 'prod' ? 80 : process.env.NODE_ENV === 'dev' ? 3000 : 3000;
+		this.port = process.env.NODE_ENV === 'prod' ? 8080 : process.env.NODE_ENV === 'dev' ? 3000 : 3000;
 	}
 
 	startServer() {
