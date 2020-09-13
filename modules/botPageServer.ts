@@ -1,5 +1,6 @@
 import express from 'express';
 import logger from './logger';
+import faqStore from './faqStore';
 
 export default class BotPageServer {
 	private server;
@@ -20,8 +21,10 @@ export default class BotPageServer {
 	private configServer() {
 		this.server.set('view engine', 'pug');
 
-		this.server.get('/', (req, res) => {
-			res.render('home', { title: 'KA_Servitor', message: 'Ich lebe um zu dienen...' });
+		this.server.get('/', async (req, res) => {
+			const faq = await faqStore.getFaq();
+
+			res.render('home', { title: 'KA_Servitor', message: 'Ich lebe um zu dienen...', faq: faq });
 		});
 	}
 }

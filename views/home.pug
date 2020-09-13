@@ -3,3 +3,7 @@ html
 		title= title
 	body
 		h1= message
+		h2= "registered Faq Messages"
+		ul
+			each value, key in faq
+				li= key + " - " + value

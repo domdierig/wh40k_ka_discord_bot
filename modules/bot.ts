@@ -1,42 +1,28 @@
 import Discord from 'discord.js';
-import writeJsonFile from 'write-json-file';
-import loadJsonFile from 'load-json-file';
 import logger from './logger';
+import faqStore from './faqStore';
 
 const prefix = '!';
 const addCommand = prefix + 'add';
 const deleteCommand = prefix + 'delete';
-const listCommand = prefix + 'list';
 
 export default class Bot {
 	discordBot: Discord.Client;
-	faq: any;
 	botReady: boolean;
-	answerUliUpperBoundary: number;
-	dissUliIsOn: boolean;
-	uliDisses: string[];
 
 	constructor() {
 		this.discordBot = new Discord.Client();
-		this.faq = {};
 		this.botReady = false;
-	}
-
-	async saveFAQ(): Promise<void> {
-		await writeJsonFile('faq.json', this.faq);
 	}
 
 	async init(): Promise<void> {
 		this.discordBot.login(process.env.BOT_TOKEN);
-
-		this.faq = await loadJsonFile('faq.json');
 
 		this.registerReady();
 		this.registerBotMention();
 		this.registerAddFaqCommand();
 		this.registerDeleteFaqCommand();
 		this.registerSendFaqAnswer();
-		this.registerListCommand();
 	}
 
 	async registerReady(): Promise<void> {
@@ -88,9 +74,7 @@ export default class Bot {
 			const key = content[0].toLowerCase();
 			const phrase = content[1];
 
-			this.faq[key] = phrase;
-
-			await writeJsonFile('faq.json', this.faq);
+			faqStore.setFaqMessage(key, phrase);
 
 			logger.logBotFAQ('new faq message', key, phrase);
 			return await message.channel.send('Kommando ausgeführt.');
@@ -114,39 +98,12 @@ export default class Bot {
 
 			const content = message.content.substring(deleteCommand.length + 1).toLowerCase();
 
-			let phraseDeleted = this.faq[content];
-
-			delete this.faq[content];
-
-			await writeJsonFile('faq.json', this.faq);
+			let phraseDeleted = await faqStore.getFaqMessage(content);
+			faqStore.deleteFaqMessage(content);
 
 			logger.logBotFAQ('faq entry deleted', content, phraseDeleted);
 
 			return await message.channel.send('Kommando ausgeführt.');
-		});
-	}
-
-	async registerListCommand(): Promise<void> {
-		this.discordBot.on('message', async (message) => {
-			if (message.author.bot) {
-				return;
-			}
-
-			if (!message.content.startsWith(listCommand)) {
-				return;
-			}
-
-			let messagetoSend = 'Nach meiner aktuellen Konfiguration reagiere ich auf folgende Trigger:';
-
-			for (const key in this.faq) {
-				messagetoSend += ' ' + key + ',';
-			}
-
-			messagetoSend = messagetoSend.substring(0, messagetoSend.length - 1);
-
-			logger.log('list of faq keys was requested');
-
-			return await message.channel.send(messagetoSend);
 		});
 	}
 
@@ -168,15 +125,9 @@ export default class Bot {
 				return;
 			}
 
-			const content = message.content.toLowerCase();
-
-			for (const key in this.faq) {
-				if (content.includes(' ' + key + ' ') || content.startsWith(key + ' ') || content.endsWith(' ' + key) || content === key) {
-					await message.channel.send(this.faq[key]);
-					logger.logBotFAQ('faq message send', key, this.faq[key]);
-					break;
-				}
-			}
+			const faq = await faqStore.searchMessageForFaqKey(message.content);
+			await message.channel.send(faq);
+			logger.log('faq message send');
 		});
 	}
 }
