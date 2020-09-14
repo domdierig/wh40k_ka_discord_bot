@@ -4,11 +4,8 @@
 	"description": "",
 	"main": "bin/app.js",
 	"scripts": {
-		"compile": "tsc",
-		"dev": "yarn nodemon -e ts --exec \"yarn compile\"",
-		"compile-and-start": "tsc && node bin/app.js",
-		"start-npm": "nodemon -e ts --exec \"npm run compile-and-start\"",
-		"start-yarn": "yarn nodemon -e ts --exec \"yarn compile-and-start\""
+		"dev": "nodemon -e ts --exec \"tsc\"",
+		"start": "nodemon -e ts --exec \"tsc && node bin/app.js\""
 	},
 	"dependencies": {
 		"@types/express": "^4.17.8",
