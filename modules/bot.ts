@@ -126,8 +126,10 @@ export default class Bot {
 			}
 
 			const faq = await faqStore.searchMessageForFaqKey(message.content);
-			await message.channel.send(faq);
-			logger.log('faq message send');
+			if (faq) {
+				message.channel.send(faq);
+				logger.log('faq message send');
+			}
 		});
 	}
 }
