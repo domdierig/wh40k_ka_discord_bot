@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export class Logger {
 	constructor() {}
@@ -12,7 +12,7 @@ export class Logger {
 	}
 
 	getTime(): string {
-		return moment().format('DD.MM.YYYY - HH:mm :');
+		return dayjs().format('DD.MM.YYYY - HH:mm :');
 	}
 }
 
